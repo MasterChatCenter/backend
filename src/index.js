@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const express = require('express');
 const cors = require('cors');
 const http = require('http');
@@ -7,7 +9,6 @@ const port = process.env.PORT || 3005;
 require('dotenv').config()
 
 const app = express();
-const server = http.createServer(app);
 
 // App configuration
 app.use(function (req, res, next) {
@@ -21,18 +22,16 @@ app.use(function (req, res, next) {
 app.use(cors());
 app.set('port', port);
 
-app.use(
-  bodyParser.json({
-    limit: '50mb',
-  })
-);
+app.use(express.urlencoded({extended: false}))
+
+app.use(express.json());
 
 // Routes
 router(app);
 
 // Start server
 // =============================================================================
-server.listen(app.get('port'), function () {
+app.listen(app.get('port'), function () {
   console.log('Magic happens on port ', app.get('port'));
 });
 

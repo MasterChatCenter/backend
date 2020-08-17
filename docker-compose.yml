@@ -2,10 +2,20 @@ version: '3.7'
 services:
   postgres:
     image: 'postgres'
+    hostname: postgres
     ports:
       - '5432:5432'
     environment:
-      - POSTGRES_USER=pg_admin
+      - POSTGRES_USER=admin
       - POSTGRES_DB=chatCenter
       - POSTGRES_PASSWORD=examplepassq
       - PGDATA=/var/lib/postgresql/data/pgdata
+  node:
+    container_name: node
+    build: 
+      context: ./
+      dockerfile: dockerfile
+    volumes: 
+      - ./:/code
+    ports:
+      - '3005:3005'
