@@ -1,6 +1,8 @@
 const {
   errorsObj,
   defaultError,
+  jwtSecret,
+  jwtExpiresIn,
 } = require('./constants');
 
 exports.okResponse = (res, httpCode, data, message) => {
@@ -18,5 +20,11 @@ exports.errorResponse = (res, id, extra) => {
       message: error.message,
       extra: extra,
     },
+  });
+};
+
+exports.generateToken = (doc) => {
+  return jwt.sign(doc, jwtSecret, {
+    expiresIn: jwtExpiresIn,
   });
 };
