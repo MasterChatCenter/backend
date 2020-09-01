@@ -9,7 +9,7 @@ module.exports = (sequelize) => {
       type: DataTypes.INTEGER
     },
     name: {
-      allowNull: true,
+      allowNull: false,
       type: DataTypes.STRING(60)
     },
     logo: {
@@ -23,6 +23,10 @@ module.exports = (sequelize) => {
     tokenFacebook: {
       allowNull: false,
       type: DataTypes.STRING(200)
+    },
+    category: {
+      allowNull: true,
+      type: DataTypes.STRING(45)
     }
   },
   {
