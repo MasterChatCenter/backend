@@ -18,6 +18,7 @@ module.exports = (sequelize) => {
     },
     active: {
       allowNull: false,
+      defaultValue: true,
       type: DataTypes.BOOLEAN
     },
     name: {
@@ -27,6 +28,10 @@ module.exports = (sequelize) => {
     lastname: {
       allowNull: false,
       type: DataTypes.STRING(45)
+    },
+    image: {
+      allowNull: true,
+      type: DataTypes.STRING(60)
     }
   },
   {

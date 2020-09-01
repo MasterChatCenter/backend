@@ -16,6 +16,6 @@ services:
       context: ./
       dockerfile: dockerfile
     volumes: 
-      - ./:/code
+      - ./:/home/node/app
     ports:
       - '3005:3005'

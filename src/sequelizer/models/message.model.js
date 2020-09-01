@@ -8,6 +8,10 @@ module.exports = (sequelize) => {
       primaryKey: true,
       type: DataTypes.INTEGER
     },
+    text:{
+      allowNull: false,
+      type: DataTypes.STRING(150)
+    },
     sendDate: {
       allowNull: false,
       type: DataTypes.DATE
@@ -18,7 +22,7 @@ module.exports = (sequelize) => {
     }
   },
   {
-    timestamps: false,
+    timestamps: true,
   },
   {
     tableName: 'Message'

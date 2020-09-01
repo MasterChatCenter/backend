@@ -34,14 +34,14 @@ exports.getById = async (req, res) => {
 
 // Create user
 exports.create = async (req, res) => {
-  const { username, password, companyId, roleId } = req.body;
+  const userData = req.body;
 
-  if (!phone || !uuid) {
-    return errorResponse(res, errors.MISSING_REQUIRED_FIELDS);
-  }
+  // if (!phone || !uuid) {
+  //   return errorResponse(res, errors.MISSING_REQUIRED_FIELDS);
+  // }
 
   try {
-    const newUSer = await UserService.create(username, password, companyId, roleId);
+    const newUSer = await UserService.create(userData);
 
     return okResponse(
       res,
@@ -59,13 +59,13 @@ exports.create = async (req, res) => {
 exports.update = async (req, res) => {
   try {
     const { id } = req.params;
-    const { username, active, roleId } = req.body;
+    const newData = req.body;
 
     if (!id, !username, !roleId) {
       return errorResponse(res, errors.MISSING_REQUIRED_FIELDS);
     }
 
-    const updatedUser = await UserService.update(id, username, active, roleId)
+    const updatedUser = await UserService.update(newData, id)
 
     return okResponse(res, 200, { updatedUser });
   } catch (err) {
