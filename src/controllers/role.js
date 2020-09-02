@@ -36,10 +36,6 @@ exports.getById = async (req, res) => {
 exports.create = async (req, res) => {
   const roleData = req.body;
 
-  // if (!phone || !uuid) {
-  //   return errorResponse(res, errors.MISSING_REQUIRED_FIELDS);
-  // }
-
   try {
     const newrole = await roleService.create(roleData);
 

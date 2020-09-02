@@ -10,7 +10,7 @@ exports.getById = async (id) => {
   return await role.findByPk(id);
 }
 
-exports.create = async (roleData) => {
+exports.create = async (roleData) => {  
   const newRole = role.create(roleData)
   return newRole;
 }

@@ -36,10 +36,6 @@ exports.getById = async (req, res) => {
 exports.create = async (req, res) => {
   const userData = req.body;
 
-  // if (!phone || !uuid) {
-  //   return errorResponse(res, errors.MISSING_REQUIRED_FIELDS);
-  // }
-
   try {
     const newUSer = await UserService.create(userData);
 
@@ -60,10 +56,6 @@ exports.update = async (req, res) => {
   try {
     const { id } = req.params;
     const newData = req.body;
-
-    if (!id, !username, !roleId) {
-      return errorResponse(res, errors.MISSING_REQUIRED_FIELDS);
-    }
 
     const updatedUser = await UserService.update(newData, id)
 
