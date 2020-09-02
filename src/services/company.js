@@ -18,7 +18,7 @@ exports.create = async (companyData) => {
 //TO DO como se actualizaria la contraseña
 //TO DO confirmar si se puede actualizar en companyId
 exports.update = async (companyData, id) => {
-  const updatedUser = await company.update(companyData, {
+  const updatedCompany = await company.update(companyData, {
     where: {
       id: id
     }
@@ -27,7 +27,7 @@ exports.update = async (companyData, id) => {
 }
 
 exports.delete = async (id) => {
-  const deletedUser = await company.destroy({
+  const deletedCompany = await company.destroy({
     where: {
       id: id
     }

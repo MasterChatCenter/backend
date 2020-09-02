@@ -3,19 +3,19 @@ const companyController = require('../controllers/company');
 
 const companyRoutes = express.Router()
 
-// Get all users
-companyRoutes.get('/users', companyController.list); 
+// Get all companies
+companyRoutes.get('/companies', companyController.list); 
 
-// Get one user
-companyRoutes.get('/users/:id', companyController.getById);
+// Get one company
+companyRoutes.get('/companies/:id', companyController.getById);
 
-// Create user
-companyRoutes.post('/users', companyController.create);
+// Create company
+companyRoutes.post('/companies', companyController.create);
 
-// Create user
-companyRoutes.patch('/users/:id', companyController.update);
+// Create company
+companyRoutes.patch('/companies/:id', companyController.update);
 
-// Delete user
-companyRoutes.delete('/users/:id', companyController.delete);
+// Delete company
+companyRoutes.delete('/companies/:id', companyController.delete);
 
 module.exports = companyRoutes
