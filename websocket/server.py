@@ -1,25 +1,23 @@
-from flask import Flask, render_template, request
+from flask import Flask, request
 from flask.helpers import make_response
-from flask.wrappers import Response
-from flask_socketio import SocketIO, emit, send
+from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
 
 socketio = SocketIO(app, logger=True, cors_allowed_origins="*")
 
+"""Endpoint message: is used by task queue to post the message to be sent to agent"""
 @app.route('/api/message', methods=['POST'])
 def post_message():
-    print(request.get_json())
     message_to_agent = request.get_json()
     print(message_to_agent['sid'], message_to_agent['message'])
 
     socketio.emit('answer', {'data': '{}'.format(message_to_agent['message'])}, room=message_to_agent['sid'])
 
-    response = make_response({"status":"received"}, 200)
-    return response
-    
-    
+    response = make_response({"status":"message has been sent"}, 200)
+    return response   
+
 
 @socketio.on('client')
 def handle_message(message):
@@ -28,11 +26,7 @@ def handle_message(message):
 
 @socketio.on('connect')
 def test_connect():
-    print('connected :', request.sid)
-
-@socketio.on('my_custom')
-def my_event(sid):
-    emit('answer', {'data': sid})
+    print('Client connected :', request.sid)
 
 @socketio.on('disconnect')
 def test_disconnect():
