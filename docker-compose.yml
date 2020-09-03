@@ -1,5 +1,6 @@
 version: '3.7'
 services:
+
   postgres:
     image: 'postgres'
     hostname: postgres
@@ -10,12 +11,32 @@ services:
       - POSTGRES_DB=chatCenter
       - POSTGRES_PASSWORD=examplepassq
       - PGDATA=/var/lib/postgresql/data/pgdata
+  
   node:
     container_name: node
     build: 
-      context: ./
+      context: ./Api
       dockerfile: dockerfile
     volumes: 
-      - ./:/home/node/app
+      - ./Api:/home/node/app
     ports:
       - '3005:3005'
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: "rabbitmq"
+    environment: 
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=mypass
+    ports:
+      - "15672:15672"
+      - "5672:5672" 
+
+  webhook:
+    build: ./webhook
+    depends_on: 
+      - rabbitmq
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
