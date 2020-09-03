@@ -1,0 +1,6 @@
+Flask~=1.1.2
+Flask-Cors~=3.0.8
+python_dotenv~=0.14.0
+gunicorn~=20.0.4
+celery~=4.4.6
+requests~=2.24.0
