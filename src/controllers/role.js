@@ -1,20 +1,20 @@
-const UserService = require('../services/user');
+const roleService = require('../services/role');
 const { okResponse, errorResponse } = require('../utils/utils');
 const { errors } = require('../utils/constants');
 
-// Get all users
+// Get all roles
 exports.list = async (req, res) => {
   try {
-    const users = await UserService.list();
+    const roles = await roleService.list();
 
-    return okResponse(res, 200, { users });
+    return okResponse(res, 200, { roles });
   } catch (err) {
     console.log('exports.list -> err', err);
     errorResponse(res, errors.INTERNAL_ERROR, err);
   }
 };
 
-// Get one user by id
+// Get one role by id
 exports.getById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -23,26 +23,26 @@ exports.getById = async (req, res) => {
       return errorResponse(res, errors.MISSING_REQUIRED_FIELDS);
     }
 
-    const user = await UserService.getById(id);
+    const role = await roleService.getById(id);
 
-    return okResponse(res, 200, { user });
+    return okResponse(res, 200, { role });
   } catch (err) {
     console.log('exports.getOne -> err', err);
     errorResponse(res, errors.INTERNAL_ERROR, err);
   }
 }
 
-// Create user
+// Create role
 exports.create = async (req, res) => {
-  const userData = req.body;
+  const roleData = req.body;
 
   try {
-    const newUSer = await UserService.create(userData);
+    const newrole = await roleService.create(roleData);
 
     return okResponse(
       res,
       201,
-      { user: newUSer },
+      { user: newrole },
       'Usuario creado correctamente'
     );
   } catch (err) {
@@ -51,22 +51,22 @@ exports.create = async (req, res) => {
   }
 };
 
-// Update user
+// Update role
 exports.update = async (req, res) => {
   try {
     const { id } = req.params;
     const newData = req.body;
 
-    const updatedUser = await UserService.update(newData, id)
+    const updatedrole = await roleService.update(newData, id)
 
-    return okResponse(res, 200, { updatedUser });
+    return okResponse(res, 200, { updatedrole });
   } catch (err) {
     console.log('exports.update -> err', err);
     errorResponse(res, errors.INTERNAL_ERROR, err);
   }
 }
 
-// Delete user
+// Delete role
 exports.delete = async (req, res) => {
   try {
 
@@ -76,7 +76,7 @@ exports.delete = async (req, res) => {
       return errorResponse(res, errors.MISSING_REQUIRED_FIELDS);
     }
 
-    const deletedCount = await UserService.delete(id)
+    const deletedCount = await roleService.delete(id)
 
     return okResponse(res, 200, { deletedCount });
   } catch (err) {

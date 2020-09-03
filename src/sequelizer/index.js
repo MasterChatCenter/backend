@@ -7,7 +7,7 @@ const PASS = process.env.POSTGRES_PASSWORD
 const PORT = process.env.POSTGRES_PORT
 const DB_URI = `postgres://${USER}:${PASS}@${HOST}:${PORT}/${DB_NAME}`
 const options = {
-  logging: false,
+  logging: true,
   define: {
     underscored: true,
     charset: 'utf8',
