@@ -1,5 +1,7 @@
 const express = require('express');
 const userRoutes = require('./user');
+const companyRoutes = require('./company');
+const roleRoutes = require('./role');
 const { authenticate } = require('../middleware/auth');
 
 module.exports = (app) => {
@@ -23,4 +25,8 @@ module.exports = (app) => {
 
   // User Routes
   app.use(userRoutes);
+  // Company Routes
+  app.use(companyRoutes);
+  // Role Routes
+  app.use(roleRoutes);
 }

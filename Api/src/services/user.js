@@ -2,12 +2,18 @@ const { models: {
   user
 }} = require('../sequelizer')
 
+const generalOptions = {
+  attributes: {
+    exclude: ['companyId','roleId']
+  }
+}
+
 exports.list = async () => {
-  return await user.findAll();
+  return await user.findAll(generalOptions);
 }
 
 exports.getById = async (id) => {
-  return await user.findByPk(id);
+  return await user.findByPk(id, generalOptions);
 }
 
 exports.create = async (userData) => {
