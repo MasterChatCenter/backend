@@ -59,8 +59,6 @@ exports.update = async (req, res) => {
 
     const updatedUser = await UserService.update(newData, id)
 
-    const updatedUser = await UserService.update(newData, id)
-
     return okResponse(res, 200, { updatedUser });
   } catch (err) {
     console.log('exports.update -> err', err);
