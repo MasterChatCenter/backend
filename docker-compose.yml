@@ -40,3 +40,10 @@ services:
       - "3000:3000"
     volumes:
       - .:/app
+  
+  websocket:
+    build: ./websocket
+    ports:
+      - "5000:5000"
+    environment: 
+      FLASK_ENV: development
