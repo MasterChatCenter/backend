@@ -1,26 +1,27 @@
-const jwt = require('jsonwebtoken');
+const jwt = require('../lib/jwt');
 const utils = require('../utils/utils');
-const { errors, jwtSecret } = require('../utils/constants');
+const UserService = require('../services/user');
+const { errors } = require('../utils/constants');
 require('dotenv').config();
 
 exports.authenticate = async (req, res, next) => {
   const token = req.headers['x-access-token'];
-  if (token) {
-    return jwt.verify(token, jwtSecret, async (err, decoded) => {
-      try {
-        if (err || !decoded) {
-          return utils.errorResponse(res, errors.AUTHENTICATION_FAILED, err);
-        } else {
-          // TODO: Find user in db and set data on req.user.
-          // const user = User.find({id});
-          // req.user = user;
-          return utils.errorResponse(res, errors.AUTHENTICATION_FAILED);
-        }
-      } catch (error) {
-        console.log(error);
-        return utils.errorResponse(res, errors.AUTHENTICATION_FAILED, error);
-      }
-    });
+  const { id, error } = jwt.validateToken(token);
+
+  if (error) {
+    return utils.errorResponse(res, error);
   }
-  return utils.errorResponse(res, errors.NO_TOKEN_PROVIDED);
+
+  if (!id) {
+    return utils.errorResponse(res, errors.AUTHENTICATION_FAILED);
+  }
+
+  const user = await UserService.getById(id)
+
+  if (user) {
+    req.user = user;
+    return next();
+  }
+
+  return utils.errorResponse(res, errors.AUTHENTICATION_FAILED);
 };
