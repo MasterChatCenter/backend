@@ -22,11 +22,11 @@ module.exports = (sequelize) => {
       type: DataTypes.BOOLEAN
     },
     name: {
-      allowNull: false,
+      allowNull: true,
       type: DataTypes.STRING(45)
     },
     lastname: {
-      allowNull: false,
+      allowNull: true,
       type: DataTypes.STRING(45)
     },
     image: {

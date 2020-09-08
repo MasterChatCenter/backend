@@ -1,4 +1,5 @@
 const express = require('express');
+const authRoutes = require('./auth');
 const companyRoutes = require('./company');
 const conversationRoutes = require('./conversation');
 const customerRoutes = require('./customer');
@@ -28,6 +29,8 @@ module.exports = (app) => {
 
   app.use(apiRoutes);
 
+  // Auth Routes
+  app.use(authRoutes);
   // Company Routes
   app.use(companyRoutes);
   // Conversation Routes
