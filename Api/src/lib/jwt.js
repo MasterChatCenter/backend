@@ -4,7 +4,7 @@ const { errors } = require('../utils/constants');
 
 /* -- TOKEN HANDLERS --*/
 exports.generateToken = (doc) => jwt.sign(doc, jwtSecret, {
-  expiresIn: jwtExpiresIn,
+  expiresIn: jwtExpiresIn
 });
 
 exports.validateToken = (token) => {

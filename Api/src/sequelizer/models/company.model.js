@@ -17,11 +17,11 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING(100)
     },
     facebookId: {
-      allowNull: false,
+      allowNull: true,
       type: DataTypes.STRING(30)
     },
     tokenFacebook: {
-      allowNull: false,
+      allowNull: true,
       type: DataTypes.STRING(200)
     },
     category: {
