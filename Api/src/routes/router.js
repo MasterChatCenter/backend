@@ -7,6 +7,7 @@ const notesRoutes = require('./notes');
 const roleRoutes = require('./role');
 const stateRoutes = require('./state');
 const userRoutes = require('./user');
+const imageRoutes = require('./image');
 const { authenticate } = require('../middleware/auth');
 
 module.exports = (app) => {
@@ -44,4 +45,6 @@ module.exports = (app) => {
   app.use(stateRoutes);
   // User Routes
   app.use(userRoutes);
+  // Image routes 
+  app.use(imageRoutes);
 }
