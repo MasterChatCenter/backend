@@ -34,3 +34,8 @@ exports.delete = async (id) => {
   });
   return deletedState;
 }
+
+exports.defaultData = async () => {
+  await state.create({ name: "Activo" })
+  await state.create({ name: "Finalizado" })
+}

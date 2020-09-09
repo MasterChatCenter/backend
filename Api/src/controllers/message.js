@@ -84,3 +84,25 @@ exports.delete = async (req, res) => {
     errorResponse(res, errors.INTERNAL_ERROR, err);
   }
 }
+
+exports.weebhook = async (req, res) => {
+  try {
+    const { senderId, pageId, text } = req.body;
+    const message = {
+      senderId,
+      pageId,
+      text,
+    }
+
+    if (!message) {
+      return errorResponse(res, errors.MISSING_REQUIRED_FIELDS);
+    }
+
+    const messageRes = await messageService.weebhook(message)
+
+    return okResponse(res, 200, { messageRes });
+  } catch (err) {
+    console.log('exports.weebhook -> err', err);
+    e
+  }
+}

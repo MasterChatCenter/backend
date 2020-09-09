@@ -18,4 +18,7 @@ messageRoutes.patch('/messages/:id', messageController.update);
 // Delete message
 messageRoutes.delete('/messages/:id', messageController.delete);
 
+// Webhook endpoint
+messageRoutes.post('/webhook', messageController.weebhook);
+
 module.exports = messageRoutes

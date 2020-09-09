@@ -10,6 +10,16 @@ exports.getById = async (id) => {
   return await customer.findByPk(id);
 }
 
+exports.findBySenderId = async (senderId) => {
+  const cus = await customer.findOne({
+    where: {
+      senderId: senderId
+    }
+  })
+
+  return cus ? cus.dataValues : null
+}
+
 exports.create = async (customerData) => {
   const newCustomer = customer.create(customerData)
   return newCustomer;
