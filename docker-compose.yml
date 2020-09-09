@@ -14,6 +14,7 @@ services:
   
   node:
     container_name: node
+    hostname: node
     build: 
       context: ./Api
       dockerfile: dockerfile
@@ -43,6 +44,7 @@ services:
   
   websocket:
     build: ./websocket
+    hostname: websocket
     ports:
       - "5000:5000"
     environment: 
