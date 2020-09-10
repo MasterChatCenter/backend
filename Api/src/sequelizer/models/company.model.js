@@ -22,7 +22,7 @@ module.exports = (sequelize) => {
     },
     tokenFacebook: {
       allowNull: true,
-      type: DataTypes.STRING(200)
+      type: DataTypes.STRING(250)
     },
     category: {
       allowNull: true,
