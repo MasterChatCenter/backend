@@ -13,48 +13,70 @@ services:
     hostname: postgres
     ports:
       - '5432:5432'
+    networks:
+      - internal
+    labels:
+      - traefik.enable=false
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_DB=chatCenter
       - POSTGRES_PASSWORD=examplepassq
       - PGDATA=/var/lib/postgresql/data/pgdata
-  
+
   node:
     container_name: node
-    build: 
+    build:
       context: ./Api
       dockerfile: dockerfile
-    volumes: 
+    volumes:
       - ./Api:/home/node/app
-    ports:
-      - '3005:3005'
+    labels:
+      - traefik.backend=node
+      - traefik.frontend.rule=Host:api.chatcenter.hyfi.dev
+      - traefik.docker.network=web
+      - traefik.port=3005
+    networks:
+      - internal
+      - web
 
   rabbitmq:
     image: rabbitmq:3-management
     hostname: "rabbitmq"
-    environment: 
+    environment:
       - RABBITMQ_DEFAULT_USER=admin
       - RABBITMQ_DEFAULT_PASS=mypass
     ports:
       - "15672:15672"
-      - "5672:5672" 
+      - "5672:5672"
+    networks:
+      - internal
+    labels:
+      - traefik.enable=false
 
   webhook:
     build: ./webhook
-    depends_on: 
+    depends_on:
       - rabbitmq
-    ports:
-      - "3000:3000"
     volumes:
       - .:/app
-  
+    networks:
+      - internal
+      - web
+    labels:
+      - traefik.backend=webhook
+      - traefik.frontend.rule=Host:wh.chatcenter.hyfi.dev
+      - traefik.docker.network=web
+      - traefik.port=3000
+
   websocket:
     build: ./websocket
-    ports:
-      - "5000:5000"
-    environment: 
+    environment:
       FLASK_ENV: development
-    
+    labels:
+      - traefik.backend=websocket
+      - traefik.frontend.rule=Host:ws.chatcenter.hyfi.dev
+      - traefik.docker.network=web
+      - traefik.port=5000
     networks:
       - internal
       - web
