@@ -50,8 +50,7 @@ exports.weebhook = async (messageData) => {
   
   if (!activeCon) {
     
-    let asUser = conversationService.getUserToCon();
-
+    let asUser = await conversationService.getUserToCon();
     activeCon = await conversationService.create({
       startDate: Date.now(),
       customer_id: ownCustomer.id,
@@ -60,13 +59,11 @@ exports.weebhook = async (messageData) => {
     })
   }
 
-  const newMessage = this.create({
-
+  const newMessage = await this.create({
+    ...messageData,
+    sendDate: Date.now(),
+    conversation_id: activeCon.id
   })
 
-  console.log(ownCustomer)
-
-  console.log(activeCon)
-
-  console.log(messageData)
+  return newMessage
 }

@@ -103,6 +103,5 @@ exports.weebhook = async (req, res) => {
     return okResponse(res, 200, { messageRes });
   } catch (err) {
     console.log('exports.weebhook -> err', err);
-    e
   }
 }

@@ -33,6 +33,6 @@ for (const modelDefiner of modelDefiners) {
 }
 
 relationSetup(sequelize)
-sequelize.sync()
+sequelize.sync({alter: true})
 
 module.exports = sequelize

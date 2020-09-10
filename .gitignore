@@ -2,3 +2,4 @@ node_modules/
 .env
 .venv
 ngrok.exe
+Api/src/utils/mocks/
