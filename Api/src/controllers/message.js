@@ -100,7 +100,7 @@ exports.weebhook = async (req, res) => {
 
     const messageRes = await messageService.weebhook(message)
 
-    return okResponse(res, 200, { messageRes });
+    return okResponse(res, 200, messageRes );
   } catch (err) {
     console.log('exports.weebhook -> err', err);
   }

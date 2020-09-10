@@ -65,5 +65,8 @@ exports.weebhook = async (messageData) => {
     conversation_id: activeCon.id
   })
 
-  return newMessage
+  return { 
+    message: newMessage,
+    user: activeCon.user_id,
+  }
 }
