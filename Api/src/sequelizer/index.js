@@ -1,5 +1,6 @@
 const { Sequelize } = require('sequelize')
 const { relationSetup } = require('./relationSetup')
+
 const USER = process.env.POSTGRES_USER
 const HOST = process.env.POSTGRES_HOST
 const DB_NAME = process.env.POSTGRES_DB

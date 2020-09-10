@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const router = require('./routes/router');
 const port = process.env.PORT || 3005;
 const sequelize = require('./sequelizer');
+const stetService = require('./services/state');
 
 const app = express();
 
@@ -38,6 +39,8 @@ async function assertDatabaseConnection () {
     process.exit(1)
   }
 }
+
+stetService.defaultData();
 
 // Routes
 router(app);

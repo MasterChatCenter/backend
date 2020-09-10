@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const authService = require('../services/auth');
 const userService = require('../services/user');
 const { okResponse, errorResponse } = require('../utils/utils');
@@ -16,7 +16,7 @@ exports.login = async (req, res) => {
   const validatePassword = await bcrypt.compare(password, user.password)
   if (validatePassword){
     const token = await authService.getToken({id: user.id})
-    return okResponse(res, 200, { token });
+    return okResponse(res, 200, { token, user_id: user.id });
   } else {
     return errorResponse(res, errors.AUTHENTICATION_FAILED);
   }

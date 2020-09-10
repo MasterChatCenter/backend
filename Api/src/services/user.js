@@ -1,7 +1,9 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 const { models: {
-  user
+  user,
+  company, 
+  role
 }} = require('../sequelizer')
 
 const generalOptions = {
@@ -23,7 +25,19 @@ exports.findByUsername = async (username) => {
 }
 
 exports.getById = async (id) => {
-  return await user.findByPk(id, generalOptions);
+  return await user.findByPk(id, {
+    ...generalOptions,
+    include: [
+      {
+        model: company,
+        attributes: ['id', 'name', 'logo', 'facebookId', 'tokenFacebook', 'category']
+      },
+      {
+        model: role,
+        attributes: ['id','name','code']
+      }
+    ]
+  });
 }
 
 exports.create = async (userData) => {
@@ -47,11 +61,15 @@ exports.update = async (userData, id) => {
       ...userData,
       password: password
     }
-    console.log(newData)
-  } else {
-    const newData = {
-      ...userData
-    }
+    const updatedUser = await user.update(newData, {
+      where: {
+        id: id
+      }
+    })
+    return updatedUser;
+  }
+  const newData = {
+    ...userData
   }
   const updatedUser = await user.update(newData, {
     where: {

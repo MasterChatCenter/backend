@@ -2,6 +2,9 @@ const { models: {
   message
 }} = require('../sequelizer')
 
+const customerService = require("./customer");
+const conversationService = require('./conversation');
+
 exports.list = async () => {
   return await message.findAll();
 }
@@ -33,4 +36,37 @@ exports.delete = async (id) => {
     }
   });
   return deletedMessage;
+}
+
+exports.weebhook = async (messageData) => {
+
+  let ownCustomer = await customerService.findBySenderId(messageData.senderId);
+  
+  if (!ownCustomer) {
+    ownCustomer = await customerService.create({ senderId: messageData.senderId });
+  }
+
+  let activeCon = await conversationService.getActive(ownCustomer.id)
+  
+  if (!activeCon) {
+    
+    let asUser = conversationService.getUserToCon();
+
+    activeCon = await conversationService.create({
+      startDate: Date.now(),
+      customer_id: ownCustomer.id,
+      state_id: 1,
+      user_id: asUser.id,
+    })
+  }
+
+  const newMessage = this.create({
+
+  })
+
+  console.log(ownCustomer)
+
+  console.log(activeCon)
+
+  console.log(messageData)
 }
