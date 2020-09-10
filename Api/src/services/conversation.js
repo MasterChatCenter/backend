@@ -19,6 +19,8 @@ exports.getActive = async (customerId) => {
       state_id: 1
     }
   })
+
+  return cover
 }
 
 exports.create = async (conversationData) => {
