@@ -67,6 +67,20 @@ services:
       - traefik.frontend.rule=Host:wh.chatcenter.hyfi.dev
       - traefik.docker.network=web
       - traefik.port=3000
+  
+  flower:
+    build: mher/flower
+    command: ["flower", "--broker=amqp://admin:mypass@rabbitmq", "--port=5555"]
+    networks:
+      - internal
+      - web
+    labels:
+      - traefik.backend=flower
+      - traefik.frontend.rule=Host:chatcenter.hyfi.dev
+      - traefik.docker.network=web
+      - traefik.port=5555
+    depends_on:
+      - rabbitmq
 
   websocket:
     build: ./websocket

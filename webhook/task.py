@@ -13,5 +13,5 @@ def publish(message):
         "pageId": message["recipient"]["id"],
         "text": message["message"]["text"]
     })
-    
+
     # TO DO add endoitn back and websok
