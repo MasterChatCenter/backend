@@ -48,6 +48,5 @@ exports.delete = async (id) => {
 
 exports.getUserToCon = async () => {
   const [user, metadata] = await sequelize.query("SELECT COUNT(user_id) as cant, user_id FROM Conversation GROUP BY user_id ORDER BY cant desc")
-  console.log(user)
-  return user
+  return user.user_id ? user : null
 }
