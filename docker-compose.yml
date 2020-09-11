@@ -69,7 +69,7 @@ services:
       - traefik.port=3000
   
   flower:
-    build: mher/flower
+    image: mher/flower
     command: ["flower", "--broker=amqp://admin:mypass@rabbitmq", "--port=5555"]
     networks:
       - internal
