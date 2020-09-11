@@ -3,3 +3,4 @@ node_modules/
 .venv
 ngrok.exe
 Api/src/utils/mocks/
+docker-compose.local.yml
