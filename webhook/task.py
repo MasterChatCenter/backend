@@ -8,10 +8,10 @@ app = Celery('tweet',broker='amqp://admin:mypass@rabbitmq:5672')
 @app.task
 def sendMessage(message):
     requests.post("http://websocket:5000/api/message", json = {
-            "sid":"6ca6747e237e4c19926540ed92504fe9",
-            "message":"Hi, I need help with something I bought yesterday",
+            "senderId":"6ca6747e237e4c19926540ed92504fe9",
+            "text":"Hi, I need help with something I bought yesterday",
             "username":"Morty Smith",
-            "msn": message
+            "pageId": "page id"
     })
     return message
 
@@ -27,5 +27,6 @@ def publish(message):
     requests.post("http://websocket:5000/api/message", json = {
         "senderId": message["sender"]["id"],
         "pageId": message["recipient"]["id"],
-        "text": message["message"]["text"]
+        "text": message["message"]["text"],
+        "username":"Morty Smith",
     })

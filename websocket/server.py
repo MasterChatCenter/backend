@@ -12,9 +12,9 @@ socketio = SocketIO(app, logger=True, cors_allowed_origins="*")
 @app.route('/api/message', methods=['POST'])
 def post_message():
     message_to_agent = request.get_json()
-    print(message_to_agent['sid'], message_to_agent['message'])
+    print(message_to_agent['senderId'], message_to_agent['text'])
 
-    socketio.emit('answer', {'data': '{}'.format(message_to_agent['message'])}, room=message_to_agent['username'])
+    socketio.emit('answer', message_to_agent, room=message_to_agent['username'])
 
     response = make_response({"status":"message has been sent"}, 200)
     return response   
