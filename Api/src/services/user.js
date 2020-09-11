@@ -69,3 +69,12 @@ exports.delete = async (id) => {
   });
   return deletedUser;
 }
+
+exports.filterUsers = async (query) => {
+  const filteredUsers = await user.findAll({
+    where: {
+      ...query
+    }
+  });
+  return filteredUsers;
+}

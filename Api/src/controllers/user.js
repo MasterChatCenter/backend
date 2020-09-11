@@ -14,6 +14,19 @@ exports.list = async (req, res) => {
   }
 };
 
+// Get all filtered users
+
+exports.filterUsers = async(req, res) => {
+  try{
+    const query = req.body;
+    const users = await UserService.filterUsers(query);
+    return okResponse(res, 200, { users });
+  } catch (err){
+    console.log('exports.list -> err', err);
+    errorResponse(res, errors.INTERNAL_ERROR, err);
+  }
+}
+
 // Get one user by id
 exports.getById = async (req, res) => {
   try {

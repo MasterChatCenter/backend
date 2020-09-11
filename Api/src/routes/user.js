@@ -4,7 +4,10 @@ const userController = require('../controllers/user');
 const userRoutes = express.Router()
 
 // Get all users
-userRoutes.get('/users', userController.list); 
+userRoutes.get('/users', userController.list);
+
+// Get all filtered users
+userRoutes.post('/users/filter', userController.filterUsers);
 
 // Get one user
 userRoutes.get('/users/:id', userController.getById);
