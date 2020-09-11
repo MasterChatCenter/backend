@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 import os
 import sys
 import json
-from task import publish
+from task import app
 
 load_dotenv()
 
@@ -21,10 +21,16 @@ def validateToken():
   return "Nothing to do", 200
 
 
+"""Test: send a task to celery"""
+@message_router.route('/test', methods=['GET'])
+def test():
+  app.send_task('task.sendMessage', ["This is am argument"])
+  return "task has been sent"
+
+
 @message_router.route('/webhook', methods=['POST'])
 def tafic():
   # endpoint para procesar los mensajes que llegan
-
   data = request.get_json()
   log(data)  # logging, no necesario en produccion
 
@@ -38,7 +44,7 @@ def tafic():
         if messaging_event.get("message"):  # alguien envia un mensaje
           # Se envia el mensaje al worker
           print("New message")
-          publish(messaging_event)
+          app.send_task('task.publish', [messaging_event])
 
     return "ok", 200
 
