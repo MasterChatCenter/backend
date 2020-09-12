@@ -2,6 +2,8 @@ const { models: {
   message
 }} = require('../sequelizer')
 
+const request = require('request');
+
 const customerService = require("./customer");
 const conversationService = require('./conversation');
 
@@ -13,8 +15,27 @@ exports.getById = async (id) => {
   return await message.findByPk(id);
 }
 
-exports.create = async (messageData) => {
+exports.create = async (messageData, senderId, tokenFb) => {
   const newMessage = message.create(messageData)
+
+  const data = {
+    "recipient": {
+        "id": senderId
+    },
+    "message": {
+        "text": messageData.text,
+    }
+  }
+  
+  request({
+    "uri": "https://graph.facebook.com/me/messages",
+    "qs": {
+        "access_token": tokenFb
+    },
+    "method": "POST",
+    "json": data
+  })
+
   return newMessage;
 }
 
