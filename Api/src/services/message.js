@@ -72,9 +72,6 @@ exports.weebhook = async (messageData) => {
   if (!activeCon) {
     
     let asUser = await conversationService.getUserToCon();
-    if (asUser === null) {
-      throw new Error ('No se encontraron usuarios para asignar la conversación')
-    }
     activeCon = await conversationService.create({
       startDate: Date.now(),
       customer_id: ownCustomer.id,

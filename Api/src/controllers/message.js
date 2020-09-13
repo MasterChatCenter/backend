@@ -37,7 +37,7 @@ exports.create = async (req, res) => {
   const {
     messageData,
     senderId,
-    tokenFb
+    tokenFacebook: tokenFb
   } = req.body;
 
   try {
