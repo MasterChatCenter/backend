@@ -28,8 +28,8 @@ services:
     build:
       context: ./Api
       dockerfile: dockerfile
-    volumes:
-      - ./Api:/home/node/app
+    #volumes:
+    #  - ./Api:/home/node/app
     labels:
       - traefik.backend=node
       - traefik.frontend.rule=Host:api.chatcenter.hyfi.dev
