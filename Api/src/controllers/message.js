@@ -34,10 +34,14 @@ exports.getById = async (req, res) => {
 
 // Create message
 exports.create = async (req, res) => {
-  const messageData = req.body;
+  const {
+    messageData,
+    senderId,
+    tokenFacebook: tokenFb
+  } = req.body;
 
   try {
-    const newMessage = await messageService.create(messageData);
+    const newMessage = await messageService.create(messageData, senderId, tokenFb);
 
     return okResponse(
       res,
