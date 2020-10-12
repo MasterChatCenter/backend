@@ -10,6 +10,14 @@ exports.getById = async (id) => {
   return await notes.findByPk(id);
 }
 
+exports.getByCustomerId = async (customerId) => {
+  return await notes.findAll({
+    where: {
+      customer_id: customerId,
+    }
+  })
+}
+
 exports.create = async (noteData) => {  
   const newNote = notes.create(noteData)
   return newNote;

@@ -7,10 +7,10 @@ const noteRoutes = express.Router()
 noteRoutes.get('/notes', noteController.list); 
 
 // Get one note
-noteRoutes.get('/notes/:id', noteController.getById);
+noteRoutes.get('/note/:id', noteController.getById);
 
-// Create note
-noteRoutes.post('/notes', noteController.create);
+// get by senderids
+noteRoutes.get('/notes/:senderId', noteController.getBySenderId);
 
 // Create note
 noteRoutes.patch('/notes/:id', noteController.update);
