@@ -27,10 +27,10 @@ exports.create = async (customerData) => {
 
 //TO DO como se actualizaria la contraseña
 //TO DO confirmar si se puede actualizar en customerId
-exports.update = async (customerData, id) => {
+exports.update = async (customerData, senderId) => {
   const updatedCustomer = await customer.update(customerData, {
     where: {
-      id: id
+      senderId: senderId
     }
   })
   return updatedCustomer;
