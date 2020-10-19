@@ -13,6 +13,9 @@ noteRoutes.get('/note/:id', noteController.getById);
 noteRoutes.get('/notes/:senderId', noteController.getBySenderId);
 
 // Create note
+noteRoutes.post('/notes', noteController.create);
+
+// Update note
 noteRoutes.patch('/notes/:id', noteController.update);
 
 // Delete note
