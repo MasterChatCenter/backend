@@ -1,6 +1,7 @@
 const companyService = require('../services/company');
 const { okResponse, errorResponse } = require('../utils/utils');
 const { errors } = require('../utils/constants');
+const FB = require('fb').default
 
 // Get all companies
 exports.list = async (req, res) => {
@@ -34,20 +35,37 @@ exports.getById = async (req, res) => {
 
 // Create company
 exports.create = async (req, res) => {
-  const companyData = req.body;
-
-  // if (!phone || !uuid) {
-  //   return errorResponse(res, errors.MISSING_REQUIRED_FIELDS);
-  // }
-
+  
   try {
+    let companyData = req.body;
+    const { token, id } = req.query;
+
+    FB.setAccessToken(token);
+    const listedPages = await FB.api(`${id}/accounts`, 'get');
+    const page = listedPages.data[0];
+
+    FB.setAccessToken(page.access_token);
+    await FB.api(`${page.id}/subscribed_apps`, 'post', {
+      subscribed_fields: [
+        'messages',
+        'messaging_postbacks',
+        'messaging_optins',
+      ],
+    });
+
+    companyData = ({
+      ...companyData,
+      tokenFacebook: page.access_token,
+      facebookId: page.id,
+    });
+
     const newCompany = await companyService.create(companyData);
 
     return okResponse(
       res,
       201,
-      { user: newCompany },
-      'Usuario creado correctamente'
+      { company: newCompany },
+      'Compañía creado correctamente'
     );
   } catch (err) {
     console.log('exports.create -> err', err);
