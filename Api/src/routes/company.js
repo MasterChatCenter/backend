@@ -12,7 +12,7 @@ companyRoutes.get('/companies/:id', companyController.getById);
 // Create company
 companyRoutes.post('/companies', companyController.create);
 
-// Create company
+// Update company
 companyRoutes.patch('/companies/:id', companyController.update);
 
 // Delete company
