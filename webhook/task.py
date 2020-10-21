@@ -17,12 +17,15 @@ def sendMessage(message):
 
 @app.task
 def publish(message):
-
-    r = requests.post("http://node:3005/webhook", json= {
-        "senderId": message["sender"]["id"],
-        "pageId": message["recipient"]["id"],
-        "text": message["message"]["text"]
-    })
+    try:
+        r = requests.post("http://node:3005/webhook", json= {
+            "senderId": message["sender"]["id"],
+            "pageId": message["recipient"]["id"],
+            "text": message["message"]["text"]
+        })
+    except Exception as e:
+        print(e)
+    
 
     requests.post("http://websocket:5000/api/message", json = {
         "senderId": message["sender"]["id"],
