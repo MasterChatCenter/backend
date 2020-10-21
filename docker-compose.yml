@@ -76,7 +76,7 @@ services:
       - web
     labels:
       - traefik.backend=flower
-      - traefik.frontend.rule=Host:chatcenter.hyfi.dev
+      - traefik.frontend.rule=Host:flower.chatcenter.hyfi.dev
       - traefik.docker.network=web
       - traefik.port=5555
     depends_on:
