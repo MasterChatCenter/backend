@@ -28,15 +28,10 @@ services:
     build:
       context: ./Api
       dockerfile: dockerfile
-<<<<<<< HEAD
     volumes:
       - ./Api:/home/node/app
     ports: 
       - 3005:3005
-=======
-    #volumes:
-    #  - ./Api:/home/node/app
->>>>>>> 109813bf771ad06b701903cf2e2059d28d36a894
     labels:
       - traefik.backend=node
       - traefik.frontend.rule=Host:api.chatcenter.hyfi.dev
