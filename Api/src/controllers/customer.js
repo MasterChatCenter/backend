@@ -54,11 +54,9 @@ exports.create = async (req, res) => {
 // Update customer
 exports.update = async (req, res) => {
   try {
-    const { id } = req.params;
-    const newData = req.body;
+    const { senderId, newData } = req.body;
 
-    const updatedCustomer = await customerService.update(newData, id)
-
+    const updatedCustomer = await customerService.update(newData, senderId)
     return okResponse(res, 200, { updatedCustomer });
   } catch (err) {
     console.log('exports.update -> err', err);
