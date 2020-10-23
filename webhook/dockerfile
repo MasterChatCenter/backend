@@ -1,0 +1,15 @@
+
+FROM python:3
+
+ADD . .
+
+ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE 17
+ENV TIMEOUT 120
+
+RUN pip install -r requirements.txt
+
+
+EXPOSE 3000
+
+ENTRYPOINT gunicorn -b 0.0.0.0:3000 wsgi:app | celery -A task worker -B -l info

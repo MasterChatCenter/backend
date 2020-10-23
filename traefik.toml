@@ -1,0 +1,31 @@
+defaultEntryPoints = ["http", "https"]
+
+[entryPoints]
+    [entryPoints.dashboard]
+        address = ":8080"
+        [entryPoints.dashboard.auth]
+        [entryPoints.dashboard.auth.basic]
+            users = ["admin:$apr1$FoECAJBl$wDLysREqtmj.W6E3d3.fU1"]
+
+    [entryPoints.http]
+        address = ":80"
+            [entryPoints.http.redirect]
+                entryPoint = "https"
+    [entryPoints.https]
+        address = ":443"
+            [entryPoints.https.tls]
+[api]
+entrypoint="dashboard"
+
+[acme]
+email = "anturyf@hotmail.com"
+storage = "acme.json"
+entryPoint = "https"
+onHostRule = true
+    [acme.httpChallenge]
+    entryPoint = "http"
+
+[docker]
+domain = "chatcenter.hyfi.dev"
+watch = true
+network = "web"
