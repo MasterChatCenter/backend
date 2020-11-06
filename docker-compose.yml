@@ -29,10 +29,10 @@ services:
     #  context: ./Api
     #  dockerfile: dockerfile
     image: ghcr.io/masterchatcenter/backend_node:latest
-    volumes:
-      - ./Api:/home/node/app
-    ports: 
-      - 3005:3005
+    #volumes:
+    #  - ./Api:/home/node/app
+    #ports: 
+    #  - 3005:3005
     labels:
       - traefik.backend=node
       - traefik.frontend.rule=Host:api.chatcenter.hyfi.dev
@@ -96,6 +96,20 @@ services:
       - traefik.frontend.rule=Host:ws.chatcenter.hyfi.dev
       - traefik.docker.network=web
       - traefik.port=5000
+    networks:
+      - internal
+      - web
+  
+  nextjs:
+    container_name: nextjs
+    build:
+      context: ../frontend/
+      dockerfile: Dockerfile
+    labels:
+      - traefik.backend=nextjs
+      - traefik.frontend.rule=Host:chatcenter.hyfi.dev
+      - traefik.docker.network=web
+      - traefik.port=3002
     networks:
       - internal
       - web
