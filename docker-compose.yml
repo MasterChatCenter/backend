@@ -25,9 +25,10 @@ services:
 
   node:
     container_name: node
-    build:
-      context: ./Api
-      dockerfile: dockerfile
+    #build:
+    #  context: ./Api
+    #  dockerfile: dockerfile
+    image: ghcr.io/masterchatcenter/backend_node:latest
     volumes:
       - ./Api:/home/node/app
     ports: 
@@ -56,7 +57,8 @@ services:
       - traefik.enable=false
 
   webhook:
-    build: ./webhook
+    #build: ./webhook
+    image: ghcr.io/masterchatcenter/backend_webhook:latest
     depends_on:
       - rabbitmq
     volumes:
@@ -71,7 +73,7 @@ services:
       - traefik.port=3000
   
   flower:
-    image: mher/flower
+    image: mher/flower:0.9.5
     command: ["flower", "--broker=amqp://admin:mypass@rabbitmq", "--port=5555"]
     networks:
       - internal
@@ -85,7 +87,8 @@ services:
       - rabbitmq
 
   websocket:
-    build: ./websocket
+    #build: ./websocket
+    image: ghcr.io/masterchatcenter/backend_websocket:latest
     environment:
       FLASK_ENV: development
     labels:
