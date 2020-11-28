@@ -39,14 +39,14 @@ services:
 
   api:
     build:
-      context: ./Api
+      context: ./api
       dockerfile: dockerfile.dev
     env_file:
-      - ./Api/.env
+      - ./api/.env
     depends_on:
       - db
     volumes:
-      - ./Api:/usr/src/
+      - ./api:/usr/src/
       - /usr/src/node_modules
     ports: 
       - 3000:3000
