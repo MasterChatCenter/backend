@@ -1,0 +1,78 @@
+version: '3.8'
+
+services:
+  db:
+    image: 'postgres'
+    ports:
+      - '5432:5432'
+    env_file:
+      - ./.env
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - type: volume
+        source: dbdata
+        target: /var/lib/postgresql/data
+  
+  rabbitmq:
+    image: rabbitmq:3-management
+    env_file:
+      - ./.env
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+
+  flower:
+    image: mher/flower:0.9.5
+    env_file:
+      - ./.env
+    depends_on:
+      - rabbitmq
+    ports:
+      - 5555:5555
+    command: ["flower", "--broker=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq", "--port=5555"]
+
+  api:
+    build:
+      context: ./Api
+      dockerfile: dockerfile.dev
+    env_file:
+      - ./Api/.env
+    depends_on:
+      - db
+    volumes:
+      - ./Api:/usr/src/
+      - /usr/src/node_modules
+    ports: 
+      - 3000:3000
+    command: npx nodemon src/index.js
+
+  webhook:
+    build: 
+      context: ./webhook
+      dockerfile: dockerfile.dev
+    env_file:
+      - ./webhook/.env
+    depends_on:
+      - rabbitmq
+    volumes:
+      - .:/app
+    ports:
+      - 4000:4000
+
+  websocket:
+    build:
+      context: ./websocket
+      dockerfile: dockerfile.dev
+    env_file:
+      - ./websocket/.env
+    ports:
+      - 5000:5000
+
+volumes:
+  dbdata:

@@ -5,7 +5,7 @@ const cors = require('cors');
 const http = require('http');
 const bodyParser = require('body-parser');
 const router = require('./routes/router');
-const port = process.env.PORT || 3005;
+const port = process.env.PORT || 3000;
 const sequelize = require('./sequelizer');
 const stetService = require('./services/state');
 
@@ -48,8 +48,12 @@ router(app);
 // Start server
 // =============================================================================
 app.listen(app.get('port'), async function () {
-  await assertDatabaseConnection()
-  console.log('Magic happens on port ', app.get('port'));
+  try {
+    await assertDatabaseConnection()
+    console.log('Magic happens on port ', app.get('port'));
+  } catch (error) {
+    console.log('HAY UN ERROR');
+  }
 });
 
 exports.app = app;
