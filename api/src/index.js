@@ -4,6 +4,8 @@ const express = require('express');
 const cors = require('cors');
 const http = require('http');
 const bodyParser = require('body-parser');
+const logger = require('morgan');
+const { info } = require('./utils/debug'); 
 const router = require('./routes/router');
 const port = process.env.PORT || 3000;
 const sequelize = require('./sequelizer');
@@ -22,7 +24,7 @@ app.use(function (req, res, next) {
 
 app.use(cors());
 app.set('port', port);
-
+app.use(logger('dev', { stream: { write: (msg) => info(msg) } }));
 app.use(express.urlencoded({extended: false}))
 
 app.use(express.json());

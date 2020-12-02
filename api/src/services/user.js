@@ -12,8 +12,12 @@ const generalOptions = {
   }
 }
 
-exports.list = async () => {
-  return await user.findAll(generalOptions);
+exports.list = async (queries) => {
+  const { company_id } = queries;
+  const where = company_id ? {
+    company_id
+  } : {};
+  return await user.findAll({ ...generalOptions, where });
 }
 
 exports.findByUsername = async (username) => {

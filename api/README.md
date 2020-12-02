@@ -13,6 +13,7 @@ Example
 // CONFIG
 PORT=
 DEV=
+DEBUG=app:*
 
 // PG
 POSTGRES_USER=

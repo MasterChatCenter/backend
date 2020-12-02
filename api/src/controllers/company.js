@@ -38,7 +38,7 @@ exports.create = async (req, res) => {
   
   try {
     let companyData = req.body;
-    const { token, id } = req.query;
+    const { facebookId: id, tokenFacebook: token } = companyData;
 
     FB.setAccessToken(token);
     const listedPages = await FB.api(`${id}/accounts`, 'get');

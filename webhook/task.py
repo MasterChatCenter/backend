@@ -18,7 +18,7 @@ def sendMessage(message):
 @app.task
 def publish(message):
     try:
-        r = requests.post("http://node:3005/webhook", json= {
+        r = requests.post("http://api:3000/webhook", json= {
             "senderId": message["sender"]["id"],
             "pageId": message["recipient"]["id"],
             "text": message["message"]["text"]
