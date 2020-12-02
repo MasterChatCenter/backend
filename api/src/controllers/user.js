@@ -4,8 +4,9 @@ const { errors } = require('../utils/constants');
 
 // Get all users
 exports.list = async (req, res) => {
+  const { company_id } = req.query;
   try {
-    const users = await UserService.list();
+    const users = await UserService.list({ company_id });
 
     return okResponse(res, 200, { users });
   } catch (err) {
