@@ -49,7 +49,7 @@ exports.delete = async (id) => {
 
 exports.getUserToCon = async () => {
 
-  const free_user = await UserService.getAllUsersWitoutCOnversation()
+  const free_user = await UserService.getUserWitoutCOnversation()
 
   if (free_user) {
     return free_user
