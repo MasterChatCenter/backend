@@ -18,4 +18,6 @@ conversationRoutes.patch('/conversations/:id', conversationController.update);
 // Delete conversation
 conversationRoutes.delete('/conversations/:id', conversationController.delete);
 
+conversationRoutes.get('/converuser', conversationController.prueba)
+
 module.exports = conversationRoutes

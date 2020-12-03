@@ -84,3 +84,13 @@ exports.delete = async (req, res) => {
     errorResponse(res, errors.INTERNAL_ERROR, err);
   }
 }
+
+exports.prueba = async (req, res) => {
+  try {
+    const user = await conversationService.getUserToCon()
+    return okResponse(res, 200, { user })
+  } catch (error) {
+    console.log('exports.prueba -> err', error);
+    errorResponse(res, errors.INTERNAL_ERROR, error);
+  }
+}
