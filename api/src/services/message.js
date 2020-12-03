@@ -71,12 +71,12 @@ exports.weebhook = async (messageData) => {
   
   if (!activeCon) {
     
-    // let asUser = await conversationService.getUserToCon();
+    let user_id = await conversationService.getUserToCon();
     activeCon = await conversationService.create({
       startDate: Date.now(),
       customer_id: ownCustomer.id,
       state_id: 1,
-      user_id: 10, // asUser.id
+      user_id: user_id
     })
   }
 

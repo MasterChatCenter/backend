@@ -4,3 +4,4 @@ node_modules/
 ngrok.exe
 Api/src/utils/mocks/
 docker-compose.local.yml
+.vscode
