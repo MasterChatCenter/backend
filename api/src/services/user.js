@@ -1,10 +1,14 @@
 const bcrypt = require('bcryptjs');
 
-const { models: {
-  user,
-  company, 
-  role
-}} = require('../sequelizer')
+const { 
+  models: {
+    user,
+    company, 
+    role
+  }
+} = require('../sequelizer')
+
+const sequelize = require('../sequelizer');
 
 const generalOptions = {
   attributes: {
@@ -99,4 +103,14 @@ exports.filterUsers = async (query) => {
     }
   });
   return filteredUsers;
+}
+
+exports.getUserWitoutCOnversation = async () => {
+  const [users, metadata] = await sequelize.query('SELECT id as user_id FROM public."user" WHERE id NOT IN (SELECT user_id FROM Conversation GROUP BY user_id) limit 1')
+
+  if (users.length > 0) {
+    return users[0].user_id
+  }
+
+  return null
 }

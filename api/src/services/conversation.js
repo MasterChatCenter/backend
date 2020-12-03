@@ -2,6 +2,7 @@ const { models: {
   conversation
 }} = require('../sequelizer')
 
+const UserService = require("./user");
 const sequelize = require('../sequelizer');
 
 exports.list = async () => {
@@ -47,6 +48,18 @@ exports.delete = async (id) => {
 }
 
 exports.getUserToCon = async () => {
-  const [user, metadata] = await sequelize.query("SELECT COUNT(user_id) as cant, user_id FROM Conversation GROUP BY user_id ORDER BY cant desc")
-  return user.user_id ? user : null
+
+  const free_user = await UserService.getUserWitoutCOnversation()
+
+  if (free_user) {
+    return free_user
+  }
+
+  const [user, metadata] = await sequelize.query("SELECT COUNT(user_id) as cant, user_id FROM Conversation GROUP BY user_id ORDER BY cant LIMIT 1");
+  
+  if (user.length > 0) {
+    return user[0].user_id
+  }
+
+  return null
 }
