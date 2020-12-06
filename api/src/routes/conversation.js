@@ -4,7 +4,10 @@ const conversationController = require('../controllers/conversation');
 const conversationRoutes = express.Router()
 
 // Get all conversations
-conversationRoutes.get('/conversations', conversationController.list); 
+conversationRoutes.get('/conversations', conversationController.list);
+
+// Get conversation by user id and state
+conversationRoutes.get('/conversations/:user_id/:state', conversationController.getByUserId);
 
 // Get one conversation
 conversationRoutes.get('/conversations/:id', conversationController.getById);

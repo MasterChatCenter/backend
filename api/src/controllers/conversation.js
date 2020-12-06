@@ -32,6 +32,23 @@ exports.getById = async (req, res) => {
   }
 }
 
+exports.getByUserId = async (req, res) => {
+  try {
+    const { state, user_id } = req.params;
+
+    if (!user_id) {
+      return errorResponse(res, errors.MISSING_REQUIRED_FIELDS);
+    }
+
+    const conversations = await conversationService.getConversationByUserId(user_id, state)
+
+    return okResponse(res, 200, { conversations })
+  } catch (err) {
+    console.log('exports.getByUserId -> err', err);
+    errorResponse(res, errors.INTERNAL_ERROR, err);
+  }
+}
+
 // Create conversation
 exports.create = async (req, res) => {
   const conversationData = req.body;

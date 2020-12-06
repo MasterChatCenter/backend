@@ -1,6 +1,6 @@
 const { models: {
   conversation
-}} = require('../sequelizer')
+}, query} = require('../sequelizer')
 
 const UserService = require("./user");
 const sequelize = require('../sequelizer');
@@ -22,6 +22,19 @@ exports.getActive = async (customerId) => {
   })
 
   return cover
+}
+
+exports.getConversationByUserId = async (user_id, state = null) => {
+  conversation_query = {
+    user_id: user_id,
+    state_id: state
+  }
+
+  const conver = await conversation.findAll({
+    where: conversation_query
+  })
+
+  return conver
 }
 
 exports.create = async (conversationData) => {
