@@ -7,7 +7,7 @@ const conversationRoutes = express.Router()
 conversationRoutes.get('/conversations', conversationController.list);
 
 // Get conversation by user id and state
-conversationRoutes.get('/conversations/:user_id/:state', conversationController.getByUserId);
+// conversationRoutes.get('/conversations/:user_id/:state', conversationController.getByUserId);
 
 // Get one conversation
 conversationRoutes.get('/conversations/:id', conversationController.getById);

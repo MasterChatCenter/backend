@@ -4,8 +4,9 @@ const { errors } = require('../utils/constants');
 
 // Get all conversations
 exports.list = async (req, res) => {
+  const { user_id, state_id } = req.query;
   try {
-    const conversations = await conversationService.list();
+    const conversations = await conversationService.list({ user_id, state_id });
 
     return okResponse(res, 200, { conversations });
   } catch (err) {

@@ -106,7 +106,7 @@ exports.filterUsers = async (query) => {
 }
 
 exports.getUserWitoutCOnversation = async () => {
-  const [users, metadata] = await sequelize.query('SELECT id as user_id FROM public."user" WHERE id NOT IN (SELECT user_id FROM Conversation GROUP BY user_id) limit 1')
+  const [users, metadata] = await sequelize.query('SELECT id as user_id FROM public."user" WHERE active = true AND id NOT IN (SELECT user_id FROM Conversation WHERE state_id = 1 GROUP BY user_id) limit 1')
 
   if (users.length > 0) {
     return users[0].user_id

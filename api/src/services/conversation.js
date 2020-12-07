@@ -1,12 +1,37 @@
 const { models: {
-  conversation
+  conversation,
+  message,
+  customer
 }} = require('../sequelizer')
 
 const UserService = require("./user");
 const sequelize = require('../sequelizer');
 
-exports.list = async () => {
-  return await conversation.findAll();
+const filterWhere = (query) => {
+  const newQuery = {};
+  const keys = Object.getOwnPropertyNames(query);
+  keys.forEach((key) => {
+    if (query[key]) {
+      newQuery[key] = query[key];
+    }
+  });
+  return newQuery;
+}
+
+exports.list = async (query) => {
+  const { user_id, state_id } = query;
+  const where = filterWhere({ user_id, state_id });
+  return await conversation.findAll({ 
+    where,
+    include: [
+      {
+        model: message
+      },
+      {
+        model: customer
+      }
+    ]
+  });
 }
 
 exports.getById = async (id) => {
@@ -71,7 +96,7 @@ exports.getUserToCon = async () => {
     return free_user
   }
 
-  const [user, metadata] = await sequelize.query("SELECT COUNT(user_id) as cant, user_id FROM Conversation GROUP BY user_id ORDER BY cant LIMIT 1");
+  const [user, metadata] = await sequelize.query('SELECT COUNT(conversation.id) as cant, user_id FROM conversation INNER JOIN user ON conversation.user_id = user.id WHERE user.active = true GROUP BY user_id ORDER BY cant LIMIT 1');
   
   if (user.length > 0) {
     return user[0].user_id
