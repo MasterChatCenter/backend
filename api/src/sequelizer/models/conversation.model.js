@@ -8,11 +8,11 @@ module.exports = (sequelize) => {
       primaryKey: true,
       type: DataTypes.INTEGER
     },
-    startDate: {
+    state: {
       allowNull: false,
-      type: DataTypes.DATE
+      type: DataTypes.ENUM(['active','disabled'])
     },
-    endDate: {
+    end_date: {
       allowNull: true,
       type: DataTypes.DATE
     }

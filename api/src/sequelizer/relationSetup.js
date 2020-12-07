@@ -1,14 +1,33 @@
 function relationSetup (sequelize) {
   const {
     company,
+    user,
     conversation,
     customer,
     message,
-    notes,
-    role,
-    state,
-    user
+    // notes,
+    // role,
+    // state,
   } = sequelize.models
+
+  company.hasMany(user, { foreignKey: 'company_id' })
+  user.belongsTo(company)
+
+  company.hasMany(customer, { foreignKey: 'company_id' })
+  customer.belongsTo(company)
+
+  company.hasMany(conversation, { foreignKey: 'company_id' })
+  conversation.belongsTo(company)
+
+  user.hasMany(conversation, { foreignKey: 'user_id' })
+  conversation.belongsTo(user)
+
+  customer.hasMany(conversation, { foreignKey: 'customer_id' })
+  conversation.belongsTo(customer)
+
+  conversation.hasMany(message, { foreignKey: 'conversation_id' })
+  message.belongsTo(conversation)
+  /*
   company.hasMany(user, { foreignKey: 'company_id' })
   user.belongsTo(company)
 
@@ -31,7 +50,7 @@ function relationSetup (sequelize) {
   conversation.belongsTo(conversation)
 
   conversation.hasMany(message, { foreignKey: 'conversation_id' })
-  message.belongsTo(conversation)
+  message.belongsTo(conversation)*/
 }
 
 module.exports = { relationSetup }

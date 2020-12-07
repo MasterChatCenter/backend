@@ -10,28 +10,34 @@ module.exports = (sequelize) => {
     },
     username: {
       allowNull: false,
-      type: DataTypes.STRING(50)
+      type: DataTypes.CHAR(50)
     },
     password: {
       allowNull: false,
-      type: DataTypes.STRING(80)
-    },
-    active: {
-      allowNull: false,
-      defaultValue: true,
-      type: DataTypes.BOOLEAN
+      type: DataTypes.CHAR(80)
     },
     name: {
-      allowNull: true,
-      type: DataTypes.STRING(45)
+      allowNull: false,
+      defaultValue: '',
+      type: DataTypes.CHAR(45)
     },
-    lastname: {
-      allowNull: true,
-      type: DataTypes.STRING(45)
+    last_name: {
+      allowNull: false,
+      defaultValue: '',
+      type: DataTypes.CHAR(45)
     },
     image: {
       allowNull: true,
-      type: DataTypes.STRING(60)
+      type: DataTypes.CHAR(255)
+    },
+    active: {
+      allowNull: false,
+      defaultValue: false,
+      type: DataTypes.BOOLEAN
+    },
+    role: {
+      allowNull: false,
+      type: DataTypes.ENUM(['root', 'admin', 'agent'])
     }
   },
   {

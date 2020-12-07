@@ -22,10 +22,10 @@ const modelDefiners = [
   require('./models/conversation.model'),
   require('./models/customer.model'),
   require('./models/message.model'),
-  require('./models/notes.model'),
+  require('./models/user.model'),
+  /*require('./models/notes.model'),
   require('./models/role.model'),
-  require('./models/state.model'),
-  require('./models/user.model')
+  require('./models/state.model'),*/
 ]
 
 for (const modelDefiner of modelDefiners) {
