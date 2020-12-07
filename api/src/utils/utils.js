@@ -5,9 +5,14 @@ const {
   jwtExpiresIn,
 } = require('./constants');
 
-exports.okResponse = (res, httpCode, data, message) => {
+exports.okResponse = (res, status, body, message) => {
   res.set('Access-Control-Allow-Origin', '*');
-  return res.status(httpCode).json({ data, message });
+  return res.status(status).json({
+    error: false,
+    status,
+    message,
+    body,
+  });
 };
 
 exports.errorResponse = (res, id, extra) => {

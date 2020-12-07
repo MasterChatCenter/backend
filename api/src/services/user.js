@@ -12,7 +12,7 @@ const sequelize = require('../sequelizer');
 
 const generalOptions = {
   attributes: {
-    exclude: ['companyId','roleId']
+   // exclude: ['companyId','company_id']
   }
 }
 
@@ -21,7 +21,7 @@ exports.list = async (queries) => {
   const where = company_id ? {
     company_id
   } : {};
-  return await user.findAll({ ...generalOptions, where });
+  return await user.findAll({ where, attributes: { exclude: ['companyId'] } });
 }
 
 exports.findByUsername = async (username) => {
@@ -34,21 +34,23 @@ exports.findByUsername = async (username) => {
 
 exports.getById = async (id) => {
   return await user.findByPk(id, {
-    ...generalOptions,
+    attributes: {
+      exclude: ['companyId', 'company_id'],
+    },
     include: [
       {
         model: company,
-        attributes: ['id', 'name', 'logo', 'facebookId', 'tokenFacebook', 'category']
-      },
-      {
-        model: role,
-        attributes: ['id','name','code']
+        attributes: ['id', 'name', 'logo', 'facebook_id', 'token_facebook']
       }
     ]
   });
 }
 
 exports.create = async (userData) => {
+  const { username } = userData;
+  const existedUser = await user.findOne({ where: { username } });
+  if (existedUser !== null) throw new Error('email alredy exist');
+
   const password = await bcrypt.hash(userData.password, 7);
   const newData = {
     ...userData,

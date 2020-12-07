@@ -10,25 +10,23 @@ module.exports = (sequelize) => {
     },
     username: {
       allowNull: false,
-      type: DataTypes.CHAR(50)
+      type: DataTypes.STRING(50)
     },
     password: {
       allowNull: false,
-      type: DataTypes.CHAR(80)
+      type: DataTypes.STRING(80)
     },
     name: {
-      allowNull: false,
-      defaultValue: '',
-      type: DataTypes.CHAR(45)
+      allowNull: true,
+      type: DataTypes.STRING(45)
     },
     last_name: {
-      allowNull: false,
-      defaultValue: '',
-      type: DataTypes.CHAR(45)
+      allowNull: true,
+      type: DataTypes.STRING(45)
     },
     image: {
       allowNull: true,
-      type: DataTypes.CHAR(255)
+      type: DataTypes.STRING(255)
     },
     active: {
       allowNull: false,
