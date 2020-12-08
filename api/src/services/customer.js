@@ -13,7 +13,7 @@ exports.getById = async (id) => {
 exports.findBySenderId = async (senderId) => {
   const cus = await customer.findOne({
     where: {
-      senderId: senderId
+      sender_id: senderId
     }
   })
 

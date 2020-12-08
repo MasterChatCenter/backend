@@ -14,7 +14,7 @@ module.exports = (sequelize) => {
     },
     username: {
       allowNull: true,
-      type: DataTypes.CHAR(80)
+      type: DataTypes.STRING(80)
     },
     is_agent: {
       allowNull: false,

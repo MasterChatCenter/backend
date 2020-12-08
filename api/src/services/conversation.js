@@ -23,12 +23,17 @@ exports.list = async (query) => {
   const where = filterWhere({ user_id, state_id });
   return await conversation.findAll({ 
     where,
+    attributes: {
+      exclude: ['company_id', 'companyId', 'user_id', 'userId', 'customer_id', 'customerId']
+    },
     include: [
       {
-        model: message
+        model: message,
+        attributes: ['id', 'text', 'username', 'is_agent', 'createdAt']
       },
       {
-        model: customer
+        model: customer,
+        attributes: ['id', 'name', 'email', 'sender_id']
       }
     ]
   });
@@ -42,7 +47,7 @@ exports.getActive = async (customerId) => {
   const cover = await conversation.findOne({
     where: {
       customer_id: customerId,
-      state_id: 1
+      state: 'active'
     }
   })
 
@@ -91,13 +96,12 @@ exports.delete = async (id) => {
 exports.getUserToCon = async () => {
 
   const free_user = await UserService.getUserWitoutCOnversation()
-
   if (free_user) {
     return free_user
   }
-
-  const [user, metadata] = await sequelize.query('SELECT COUNT(conversation.id) as cant, user_id FROM conversation INNER JOIN user ON conversation.user_id = user.id WHERE user.active = true GROUP BY user_id ORDER BY cant LIMIT 1');
   
+  const [user, metadata] = await sequelize.query('SELECT COUNT(conversation.id) as cant, user_id FROM conversation INNER JOIN "user" ON conversation.user_id = "user".id WHERE "user".active = true GROUP BY user_id ORDER BY cant LIMIT 1');
+
   if (user.length > 0) {
     return user[0].user_id
   }

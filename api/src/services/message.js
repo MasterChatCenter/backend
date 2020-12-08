@@ -61,33 +61,30 @@ exports.delete = async (id) => {
 
 exports.weebhook = async (messageData) => {
 
-  let ownCustomer = await customerService.findBySenderId(messageData.senderId);
-  
-  if (!ownCustomer) {
-    ownCustomer = await customerService.create({ senderId: messageData.senderId });
+  let existedCustomer = await customerService.findBySenderId(messageData.senderId);
+  if (!existedCustomer) {
+    existedCustomer = await customerService.create({ sender_id: messageData.senderId });
   }
 
-  let activeCon = await conversationService.getActive(ownCustomer.id)
-  
-  if (!activeCon) {
-    
-    let user_id = await conversationService.getUserToCon();
-    activeCon = await conversationService.create({
-      startDate: Date.now(),
-      customer_id: ownCustomer.id,
-      state_id: 1,
-      user_id: user_id
+  let existedConversationActive = await conversationService.getActive(existedCustomer.id);
+  if (!existedConversationActive) {
+    let userAvailable = await conversationService.getUserToCon();
+    existedConversationActive = await conversationService.create({
+      customer_id: existedCustomer.id,
+      state: 'active',
+      user_id: userAvailable
     })
   }
 
   const newMessage = await this.create({
-    ...messageData,
-    sendDate: Date.now(),
-    conversation_id: activeCon.id
+    text: messageData.text,
+    username: existedCustomer.name,
+    is_agent: false,
+    conversation_id: existedConversationActive.id
   })
-
+  
   return { 
     message: newMessage,
-    user: activeCon.user_id,
+    user: existedConversationActive.user_id,
   }
 }

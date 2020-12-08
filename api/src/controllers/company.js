@@ -64,7 +64,7 @@ exports.create = async (req, res) => {
     return okResponse(
       res,
       201,
-      { company: newCompany },
+      newCompany,
       'Compañía creado correctamente'
     );
   } catch (err) {
