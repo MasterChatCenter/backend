@@ -39,7 +39,7 @@ exports.getById = async (req, res) => {
 
     const user = await UserService.getById(id);
 
-    return okResponse(res, 200, { user });
+    return okResponse(res, 200, user, 'usuario recuperado');
   } catch (err) {
     console.log('exports.getOne -> err', err);
     errorResponse(res, errors.INTERNAL_ERROR, err);
@@ -56,7 +56,7 @@ exports.create = async (req, res) => {
     return okResponse(
       res,
       201,
-      { user: newUSer },
+      newUSer,
       'Usuario creado correctamente'
     );
   } catch (err) {

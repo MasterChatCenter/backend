@@ -12,13 +12,13 @@ module.exports = (sequelize) => {
       allowNull: false,
       type: DataTypes.STRING(150)
     },
-    sendDate: {
-      allowNull: false,
-      type: DataTypes.DATE
+    username: {
+      allowNull: true,
+      type: DataTypes.STRING(80)
     },
-    senderId: {
+    is_agent: {
       allowNull: false,
-      type: DataTypes.STRING(100)
+      type: DataTypes.BOOLEAN
     }
   },
   {

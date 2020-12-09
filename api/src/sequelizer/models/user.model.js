@@ -16,22 +16,26 @@ module.exports = (sequelize) => {
       allowNull: false,
       type: DataTypes.STRING(80)
     },
-    active: {
-      allowNull: false,
-      defaultValue: true,
-      type: DataTypes.BOOLEAN
-    },
     name: {
       allowNull: true,
       type: DataTypes.STRING(45)
     },
-    lastname: {
+    last_name: {
       allowNull: true,
       type: DataTypes.STRING(45)
     },
     image: {
       allowNull: true,
-      type: DataTypes.STRING(60)
+      type: DataTypes.STRING(255)
+    },
+    active: {
+      allowNull: false,
+      defaultValue: false,
+      type: DataTypes.BOOLEAN
+    },
+    role: {
+      allowNull: false,
+      type: DataTypes.ENUM(['root', 'admin', 'agent'])
     }
   },
   {

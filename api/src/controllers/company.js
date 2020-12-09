@@ -8,7 +8,7 @@ exports.list = async (req, res) => {
   try {
     const companies = await companyService.list();
 
-    return okResponse(res, 200, { companies });
+    return okResponse(res, 200, { companies }, 'lista de companias');
   } catch (err) {
     console.log('exports.list -> err', err);
     errorResponse(res, errors.INTERNAL_ERROR, err);
@@ -26,7 +26,7 @@ exports.getById = async (req, res) => {
 
     const company = await companyService.getById(id);
 
-    return okResponse(res, 200, { company });
+    return okResponse(res, 200, company, 'compania recuperada');
   } catch (err) {
     console.log('exports.getOne -> err', err);
     errorResponse(res, errors.INTERNAL_ERROR, err);
@@ -38,7 +38,7 @@ exports.create = async (req, res) => {
   
   try {
     let companyData = req.body;
-    const { facebookId: id, tokenFacebook: token } = companyData;
+    const { facebook_id: id, token_facebook: token } = companyData;
 
     FB.setAccessToken(token);
     const listedPages = await FB.api(`${id}/accounts`, 'get');
@@ -64,7 +64,7 @@ exports.create = async (req, res) => {
     return okResponse(
       res,
       201,
-      { company: newCompany },
+      newCompany,
       'Compañía creado correctamente'
     );
   } catch (err) {

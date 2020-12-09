@@ -42,7 +42,7 @@ async function assertDatabaseConnection () {
   }
 }
 
-stetService.defaultData();
+// stetService.defaultData();
 
 // Routes
 router(app);

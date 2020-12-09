@@ -1,0 +1,115 @@
+version: '3.7'
+
+networks:
+  web:
+    external: true
+  internal:
+    external: false
+
+services:
+
+  postgres:
+    image: 'postgres'
+    hostname: postgres
+    ports:
+      - '5432:5432'
+    networks:
+      - internal
+    labels:
+      - traefik.enable=false
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_DB=chatCenter
+      - POSTGRES_PASSWORD=examplepassq
+      - PGDATA=/var/lib/postgresql/data/pgdata
+
+  node:
+    container_name: node
+    #build:
+    #  context: ./Api
+    #  dockerfile: dockerfile
+    image: ghcr.io/masterchatcenter/backend_node:latest
+    #volumes:
+    #  - ./Api:/home/node/app
+    #ports: 
+    #  - 3005:3005
+    labels:
+      - traefik.backend=node
+      - traefik.frontend.rule=Host:api.chatcenter.hyfi.dev
+      - traefik.docker.network=web
+      - traefik.port=3005
+    networks:
+      - internal
+      - web
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: "rabbitmq"
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=mypass
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    networks:
+      - internal
+    labels:
+      - traefik.enable=false
+
+  webhook:
+    #build: ./webhook
+    image: ghcr.io/masterchatcenter/backend_webhook:latest
+    depends_on:
+      - rabbitmq
+    volumes:
+      - .:/app
+    networks:
+      - internal
+      - web
+    labels:
+      - traefik.backend=webhook
+      - traefik.frontend.rule=Host:wh.chatcenter.hyfi.dev
+      - traefik.docker.network=web
+      - traefik.port=3000
+  
+  flower:
+    image: mher/flower:0.9.5
+    command: ["flower", "--broker=amqp://admin:mypass@rabbitmq", "--port=5555"]
+    networks:
+      - internal
+      - web
+    labels:
+      - traefik.backend=flower
+      - traefik.frontend.rule=Host:flower.chatcenter.hyfi.dev
+      - traefik.docker.network=web
+      - traefik.port=5555
+    depends_on:
+      - rabbitmq
+
+  websocket:
+    #build: ./websocket
+    image: ghcr.io/masterchatcenter/backend_websocket:latest
+    environment:
+      FLASK_ENV: development
+    labels:
+      - traefik.backend=websocket
+      - traefik.frontend.rule=Host:ws.chatcenter.hyfi.dev
+      - traefik.docker.network=web
+      - traefik.port=5000
+    networks:
+      - internal
+      - web
+  
+  nextjs:
+    container_name: nextjs
+      build:
+        context: ../frontend/
+        dockerfile: Dockerfile
+      labels:
+        - traefik.backend=nextjs
+        - traefik.frontend.rule=Host:chatcenter.hyfi.dev
+        - traefik.docker.network=web
+        - traefik.port=3002
+      networks:
+        - internal
+        - web
