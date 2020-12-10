@@ -56,14 +56,11 @@ services:
   api:
     build:
       context: ./api
-      dockerfile: dockerfile.dev
+      dockerfile: dockerfile
     env_file:
       - ./api/.env
     depends_on:
       - db
-    volumes:
-      - ./api:/usr/src/
-      - /usr/src/node_modules
     ports: 
       - 3000:3000
     labels:
@@ -78,7 +75,7 @@ services:
   webhook:
     build: 
       context: ./webhook
-      dockerfile: dockerfile.dev
+      dockerfile: dockerfile
     env_file:
       - ./webhook/.env
     depends_on:
@@ -99,7 +96,7 @@ services:
   websocket:
     build:
       context: ./websocket
-      dockerfile: dockerfile.dev
+      dockerfile: dockerfile
     env_file:
       - ./websocket/.env
     ports:
@@ -109,6 +106,23 @@ services:
       - traefik.frontend.rule=Host:ws.chatcenter.hyfi.dev
       - traefik.docker.network=web
       - traefik.port=5000
+    networks:
+      - internal
+      - web
+
+  frontend:
+    build:
+      context: ../frontend/.   
+      dockerfile: dockerfile
+    env_file:
+      - ../frontend/.env
+    ports:
+      - 8080:8080
+    labels:
+      - traefik.backend=frontend
+      - traefik.frontend.rule=Host:chatcenter.hyfi.dev
+      - traefik.docker.network=web
+      - traefik.port=8080
     networks:
       - internal
       - web
