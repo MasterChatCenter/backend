@@ -40,7 +40,7 @@ services:
   api:
     build:
       context: ./api
-      dockerfile: dockerfile.dev
+      dockerfile: dockerfile
     env_file:
       - ./api/.env
     depends_on:
@@ -55,7 +55,7 @@ services:
   webhook:
     build: 
       context: ./webhook
-      dockerfile: dockerfile.dev
+      dockerfile: dockerfile
     env_file:
       - ./webhook/.env
     depends_on:
@@ -68,7 +68,7 @@ services:
   websocket:
     build:
       context: ./websocket
-      dockerfile: dockerfile.dev
+      dockerfile: dockerfile
     env_file:
       - ./websocket/.env
     ports:
