@@ -1,4 +1,3 @@
-
 # Celery
 from celery import Celery
 import requests
@@ -15,21 +14,21 @@ def sendMessage(message):
     })
     return message
 
+
 @app.task
 def publish(message):
     try:
-        r = requests.post("http://api:3000/webhook", json= {
+        message_response = requests.post("http://node:3005/webhook", json= {
             "senderId": message["sender"]["id"],
             "pageId": message["recipient"]["id"],
             "text": message["message"]["text"]
         })
+
+        requests.post("http://websocket:5000/api/message", json = {
+            "conversation_id": message_response["message"]["conversation_id"],
+            "text": message_response["message"]["text"],
+            "user":  message_response["user"]
+        })
     except Exception as e:
         print(e)
     
-
-    requests.post("http://websocket:5000/api/message", json = {
-        "senderId": message["sender"]["id"],
-        "pageId": message["recipient"]["id"],
-        "text": message["message"]["text"],
-        "username":"Morty Smith",
-    })

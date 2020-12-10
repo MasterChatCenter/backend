@@ -12,39 +12,31 @@ socketio = SocketIO(app, logger=True, cors_allowed_origins="*")
 @app.route('/api/message', methods=['POST'])
 def post_message():
     message_to_agent = request.get_json()
-    print(message_to_agent['senderId'], message_to_agent['text'])
+    print(message_to_agent['conversation_id'], message_to_agent['text'], message_to_agent["user"])
 
-    socketio.emit('answer', message_to_agent, room=message_to_agent['username'])
+    socketio.emit('answer', message_to_agent, room=message_to_agent['user'])
 
     response = make_response({"status":"message has been sent"}, 200)
     return response   
 
-def request_user():
-    response = requests.urlopen('https://rickandmortyapi.com/api/character/2')
-    data = response.read()
-    username = json.loads(data.decode('utf-8'))['name']
-    return username
-
-@socketio.on('client')
-def handle_message(message):
-    print('received message: ' + message + ' ID: ' + request.sid)
 
 @socketio.on('join')
 def on_join(data):
-    room = request_user()
-    username = data['username']
-    join_room(room)
+    user_id = data['user']
+    join_room(user_id)
 
-    #send(username + ' has entered the room.', room=room)
+    socketio.emit("room_join", { "room": True }, room=user_id)
 
 
 @socketio.on('connect')
-def test_connect():
+def on_connect():
     print('Client connected :', request.sid)
 
+
 @socketio.on('disconnect')
-def test_disconnect():
+def on_disconnect():
     print('Client disconnected', request.sid)
+
 
 if __name__ == "__main__":
     socketio.run(app, port=5000, host='0.0.0.0' ,debug=False)
