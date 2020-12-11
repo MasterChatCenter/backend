@@ -9,12 +9,17 @@ class Socket {
   }
 
   connect(server) {
+    const io = require('socket.io')(server, {
+      cors: {
+        origin: '*',
+      }
+    });
     console.log('Starting new socket...');
-    const io = require('socket.io')(http, {
+    /*const io = require('socket.io')(http, {
       pingInterval: 200,
       pingTimeout: 10000,
       origins: '*:*',
-    }).listen(server);
+    }).listen(server);*/
 
     this._socket = io;
 

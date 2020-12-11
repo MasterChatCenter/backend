@@ -9,13 +9,11 @@ exports.joinHandler = async (socket, data) => {
     const user = await userService.getById(id);
 
     if (user) {
-      socket.leave(id, () => {
-        socket.join(id, () => {
-          const connection = require('./index').connection();
-          connection.sendEvent(id, 'join', {
-            data: { message: 'Logged in socket!' },
-          });
-        });
+      socket.leave(id);
+      socket.join(id);
+      const connection = require('./index').connection();
+      connection.sendEvent(id, 'join', {
+        data: { message: 'Logged in socket!' },
       });
     }
   }

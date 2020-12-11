@@ -1,5 +1,6 @@
 require('dotenv').config()
 
+const http = require('http');
 const express = require('express');
 const cors = require('cors');
 const logger = require('morgan');
@@ -10,7 +11,7 @@ const sequelize = require('./sequelizer');
 const socket = require('./socket');
 
 const app = express();
-
+const server = http.createServer(app);
 // App configuration
 app.use(function (req, res, next) {
   res.header(
@@ -47,7 +48,7 @@ router(app);
 
 // Start server
 // =============================================================================
-server = app.listen(app.get('port'), async function () {
+server.listen(app.get('port'), async function () {
   try {
     await assertDatabaseConnection()
     console.log('Magic happens on port ', app.get('port'));
