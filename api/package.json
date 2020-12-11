@@ -25,7 +25,8 @@
     "passport": "^0.4.1",
     "pg": "^8.3.0",
     "request": "^2.88.2",
-    "sequelizer": "^1.1.4"
+    "sequelizer": "^1.1.4",
+    "socket.io": "^3.0.4"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"

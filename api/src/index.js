@@ -2,14 +2,12 @@ require('dotenv').config()
 
 const express = require('express');
 const cors = require('cors');
-const http = require('http');
-const bodyParser = require('body-parser');
 const logger = require('morgan');
 const { info } = require('./utils/debug'); 
 const router = require('./routes/router');
 const port = process.env.PORT || 3000;
 const sequelize = require('./sequelizer');
-const stetService = require('./services/state');
+const socket = require('./socket');
 
 const app = express();
 
@@ -49,7 +47,7 @@ router(app);
 
 // Start server
 // =============================================================================
-app.listen(app.get('port'), async function () {
+server = app.listen(app.get('port'), async function () {
   try {
     await assertDatabaseConnection()
     console.log('Magic happens on port ', app.get('port'));
@@ -57,5 +55,8 @@ app.listen(app.get('port'), async function () {
     console.log('HAY UN ERROR');
   }
 });
+
+// Connect Socket
+socket.connect(server);
 
 exports.app = app;

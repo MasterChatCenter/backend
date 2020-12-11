@@ -18,16 +18,10 @@ def sendMessage(message):
 @app.task
 def publish(message):
     try:
-        message_response = requests.post("http://node:3005/webhook", json= {
+        requests.post("http://node:3005/webhook", json= {
             "senderId": message["sender"]["id"],
             "pageId": message["recipient"]["id"],
             "text": message["message"]["text"]
-        })
-
-        requests.post("http://websocket:5000/api/message", json = {
-            "conversation_id": message_response["message"]["conversation_id"],
-            "text": message_response["message"]["text"],
-            "user":  message_response["user"]
         })
     except Exception as e:
         print(e)
