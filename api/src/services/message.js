@@ -91,7 +91,8 @@ exports.weebhook = async (messageData) => {
       text: newMessage.text,
       is_agent: newMessage.is_agent,
       createdAt: newMessage.createdAt,
-      senderId: existedCustomer.sender_id
+      senderId: existedCustomer.sender_id,
+      customerId: existedCustomer.id,
     },
   });
 

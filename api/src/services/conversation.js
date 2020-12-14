@@ -19,8 +19,8 @@ const filterWhere = (query) => {
 }
 
 exports.list = async (query) => {
-  const { user_id, state_id } = query;
-  const where = filterWhere({ user_id, state_id });
+  const { user_id, state } = query;
+  const where = filterWhere({ user_id, state });
   return await conversation.findAll({ 
     where,
     attributes: {
@@ -35,7 +35,8 @@ exports.list = async (query) => {
         model: customer,
         attributes: ['id', 'name', 'email', 'sender_id']
       }
-    ]
+    ],
+    order: [ [message, 'createdAt', 'ASC'] ],
   });
 }
 
