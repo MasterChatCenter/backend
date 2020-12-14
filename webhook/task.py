@@ -1,8 +1,9 @@
 # Celery
 from celery import Celery
 import requests
+import os
 
-app = Celery('tweet',broker='amqp://admin:mypass@rabbitmq:5672')
+app = Celery('tweet', broker='amqp://' + os.getenv('RABBITMQ_USER') + ':' + os.getenv('RABBITMQ_PASS') + '@rabbitmq:5672')
 
 @app.task
 def sendMessage(message):
