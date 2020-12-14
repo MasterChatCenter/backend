@@ -82,7 +82,19 @@ exports.weebhook = async (messageData) => {
     is_agent: false,
     conversation_id: existedConversationActive.id
   })
-  
+
+  const socket = require('../socket').connection();
+  socket.sendEvent(existedConversationActive.user_id, 'answer', {
+    data: {
+      username: newMessage.username,
+      conversation_id: newMessage.conversation_id,
+      text: newMessage.text,
+      is_agent: newMessage.is_agent,
+      createdAt: newMessage.createdAt,
+      senderId: existedCustomer.sender_id
+    },
+  });
+
   return { 
     message: newMessage,
     user: existedConversationActive.user_id,
