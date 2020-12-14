@@ -1,96 +1,106 @@
-version: '3.7'
-
-networks:
-  web:
-    external: true
-  internal:
-    external: false
+version: '3.8'
 
 services:
-
-  postgres:
+  db:
     image: 'postgres'
-    hostname: postgres
     ports:
       - '5432:5432'
-    networks:
-      - internal
+    env_file:
+      - ./.env
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - type: volume
+        source: dbdata
+        target: /var/lib/postgresql/data
     labels:
       - traefik.enable=false
-    environment:
-      - POSTGRES_USER=admin
-      - POSTGRES_DB=chatCenter
-      - POSTGRES_PASSWORD=examplepassq
-      - PGDATA=/var/lib/postgresql/data/pgdata
-
-  node:
-    container_name: node
-    #build:
-    #  context: ./Api
-    #  dockerfile: dockerfile
-    image: ghcr.io/masterchatcenter/backend_node:latest
-    #volumes:
-    #  - ./Api:/home/node/app
-    #ports: 
-    #  - 3005:3005
-    labels:
-      - traefik.backend=node
-      - traefik.frontend.rule=Host:api.chatcenter.hyfi.dev
-      - traefik.docker.network=web
-      - traefik.port=3005
     networks:
       - internal
-      - web
-
+  
   rabbitmq:
     image: rabbitmq:3-management
-    hostname: "rabbitmq"
+    env_file:
+      - ./.env
     environment:
-      - RABBITMQ_DEFAULT_USER=admin
-      - RABBITMQ_DEFAULT_PASS=mypass
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
     ports:
       - "15672:15672"
       - "5672:5672"
-    networks:
-      - internal
     labels:
       - traefik.enable=false
-
-  webhook:
-    #build: ./webhook
-    image: ghcr.io/masterchatcenter/backend_webhook:latest
-    depends_on:
-      - rabbitmq
-    volumes:
-      - .:/app
     networks:
       - internal
-      - web
-    labels:
-      - traefik.backend=webhook
-      - traefik.frontend.rule=Host:wh.chatcenter.hyfi.dev
-      - traefik.docker.network=web
-      - traefik.port=3000
-  
+
   flower:
     image: mher/flower:0.9.5
-    command: ["flower", "--broker=amqp://admin:mypass@rabbitmq", "--port=5555"]
-    networks:
-      - internal
-      - web
+    env_file:
+      - ./.env
+    depends_on:
+      - rabbitmq
+    ports:
+      - 5555:5555
+    command: ["flower", "--broker=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq", "--port=5555"]
     labels:
       - traefik.backend=flower
       - traefik.frontend.rule=Host:flower.chatcenter.hyfi.dev
       - traefik.docker.network=web
       - traefik.port=5555
+    networks:
+      - internal
+      - web
+
+  api:
+    build:
+      context: ./api
+      dockerfile: dockerfile
+    env_file:
+      - ./api/.env
+    depends_on:
+      - db
+    ports: 
+      - 3000:3000
+    labels:
+      - traefik.backend=api
+      - traefik.frontend.rule=Host:api.chatcenter.hyfi.dev
+      - traefik.docker.network=web
+      - traefik.port=3000
+    networks:
+      - internal
+      - web
+
+  webhook:
+    build: 
+      context: ./webhook
+      dockerfile: dockerfile
+    env_file:
+      - ./webhook/.env
     depends_on:
       - rabbitmq
+    volumes:
+      - .:/app
+    ports:
+      - 4000:4000
+    labels:
+      - traefik.backend=webhook
+      - traefik.frontend.rule=Host:wh.chatcenter.hyfi.dev
+      - traefik.docker.network=web
+      - traefik.port=4000
+    networks:
+      - internal
+      - web
 
   websocket:
-    #build: ./websocket
-    image: ghcr.io/masterchatcenter/backend_websocket:latest
-    environment:
-      FLASK_ENV: development
+    build:
+      context: ./websocket
+      dockerfile: dockerfile
+    env_file:
+      - ./websocket/.env
+    ports:
+      - 5000:5000
     labels:
       - traefik.backend=websocket
       - traefik.frontend.rule=Host:ws.chatcenter.hyfi.dev
@@ -99,17 +109,29 @@ services:
     networks:
       - internal
       - web
-  
-  nextjs:
-    container_name: nextjs
+
+  frontend:
     build:
-      context: ../frontend/
-      dockerfile: Dockerfile
+      context: ../frontend/.   
+      dockerfile: dockerfile
+    env_file:
+      - ../frontend/.env
+    ports:
+      - 8080:8080
     labels:
-      - traefik.backend=nextjs
+      - traefik.backend=frontend
       - traefik.frontend.rule=Host:chatcenter.hyfi.dev
       - traefik.docker.network=web
-      - traefik.port=3002
+      - traefik.port=8080
     networks:
       - internal
       - web
+
+volumes:
+  dbdata:
+
+networks:
+  web:
+    external: true
+  internal:
+    external: false

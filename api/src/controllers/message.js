@@ -46,7 +46,7 @@ exports.create = async (req, res) => {
     return okResponse(
       res,
       201,
-      { user: newMessage },
+      newMessage,
       'Usuario creado correctamente'
     );
   } catch (err) {

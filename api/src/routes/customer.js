@@ -13,7 +13,7 @@ customerRoutes.get('/customers/:id', customerController.getById);
 customerRoutes.post('/customers', customerController.create);
 
 // Create customer
-customerRoutes.patch('/customers/', customerController.update);
+customerRoutes.patch('/customers/:id', customerController.update);
 
 // Delete customer
 customerRoutes.delete('/customers/:id', customerController.delete);

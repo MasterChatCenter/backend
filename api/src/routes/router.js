@@ -41,11 +41,11 @@ module.exports = (app) => {
   // Message Routes
   app.use(messageRoutes);
   // Notes Routes
-  app.use(notesRoutes);
+  // app.use(notesRoutes);
   // Role Routes
-  app.use(roleRoutes);
+  // app.use(roleRoutes);
   // State Routes
-  app.use(stateRoutes);
+  // app.use(stateRoutes);
   // User Routes
   app.use(userRoutes);
   // Image routes 

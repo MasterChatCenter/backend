@@ -1,19 +1,27 @@
 const bcrypt = require('bcryptjs');
 
-const { models: {
-  user,
-  company, 
-  role
-}} = require('../sequelizer')
+const { 
+  models: {
+    user,
+    company, 
+    role
+  }
+} = require('../sequelizer')
+
+const sequelize = require('../sequelizer');
 
 const generalOptions = {
   attributes: {
-    exclude: ['companyId','roleId']
+   // exclude: ['companyId','company_id']
   }
 }
 
-exports.list = async () => {
-  return await user.findAll(generalOptions);
+exports.list = async (queries) => {
+  const { company_id } = queries;
+  const where = company_id ? {
+    company_id
+  } : {};
+  return await user.findAll({ where, attributes: { exclude: ['companyId'] } });
 }
 
 exports.findByUsername = async (username) => {
@@ -26,21 +34,23 @@ exports.findByUsername = async (username) => {
 
 exports.getById = async (id) => {
   return await user.findByPk(id, {
-    ...generalOptions,
+    attributes: {
+      exclude: ['companyId', 'company_id'],
+    },
     include: [
       {
         model: company,
-        attributes: ['id', 'name', 'logo', 'facebookId', 'tokenFacebook', 'category']
-      },
-      {
-        model: role,
-        attributes: ['id','name','code']
+        attributes: ['id', 'name', 'logo', 'facebook_id', 'token_facebook']
       }
     ]
   });
 }
 
 exports.create = async (userData) => {
+  const { username } = userData;
+  const existedUser = await user.findOne({ where: { username } });
+  if (existedUser !== null) throw new Error('email alredy exist');
+
   const password = await bcrypt.hash(userData.password, 7);
   const newData = {
     ...userData,
@@ -95,4 +105,14 @@ exports.filterUsers = async (query) => {
     }
   });
   return filteredUsers;
+}
+
+exports.getUserWitoutCOnversation = async () => {
+  const [users, metadata] = await sequelize.query('SELECT id as user_id FROM public."user" WHERE active = true AND id NOT IN (SELECT user_id FROM Conversation WHERE state=\'active\' GROUP BY user_id) limit 1')
+
+  if (users.length > 0) {
+    return users[0].user_id
+  }
+
+  return null
 }

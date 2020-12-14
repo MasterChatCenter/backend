@@ -10,23 +10,19 @@ module.exports = (sequelize) => {
     },
     name: {
       allowNull: false,
-      type: DataTypes.STRING(60)
+      type: DataTypes.STRING(255)
     },
     logo: {
       allowNull: false,
-      type: DataTypes.STRING(100)
+      type: DataTypes.STRING(255)
     },
-    facebookId: {
-      allowNull: true,
-      type: DataTypes.STRING(30)
+    facebook_id: {
+      allowNll: true,
+      type: DataTypes.STRING(255)
     },
-    tokenFacebook: {
+    token_facebook: {
       allowNull: true,
-      type: DataTypes.STRING(250)
-    },
-    category: {
-      allowNull: true,
-      type: DataTypes.STRING(45)
+      type: DataTypes.STRING(255)
     }
   },
   {

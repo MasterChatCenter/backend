@@ -4,8 +4,9 @@ const { errors } = require('../utils/constants');
 
 // Get all conversations
 exports.list = async (req, res) => {
+  const { user_id, state } = req.query;
   try {
-    const conversations = await conversationService.list();
+    const conversations = await conversationService.list({ user_id, state });
 
     return okResponse(res, 200, { conversations });
   } catch (err) {
@@ -28,6 +29,23 @@ exports.getById = async (req, res) => {
     return okResponse(res, 200, { conversation });
   } catch (err) {
     console.log('exports.getOne -> err', err);
+    errorResponse(res, errors.INTERNAL_ERROR, err);
+  }
+}
+
+exports.getByUserId = async (req, res) => {
+  try {
+    const { state, user_id } = req.params;
+
+    if (!user_id) {
+      return errorResponse(res, errors.MISSING_REQUIRED_FIELDS);
+    }
+
+    const conversations = await conversationService.getConversationByUserId(user_id, state)
+
+    return okResponse(res, 200, { conversations })
+  } catch (err) {
+    console.log('exports.getByUserId -> err', err);
     errorResponse(res, errors.INTERNAL_ERROR, err);
   }
 }

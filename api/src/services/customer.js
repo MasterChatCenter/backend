@@ -13,7 +13,7 @@ exports.getById = async (id) => {
 exports.findBySenderId = async (senderId) => {
   const cus = await customer.findOne({
     where: {
-      senderId: senderId
+      sender_id: senderId
     }
   })
 
@@ -27,10 +27,10 @@ exports.create = async (customerData) => {
 
 //TO DO como se actualizaria la contraseña
 //TO DO confirmar si se puede actualizar en customerId
-exports.update = async (customerData, senderId) => {
+exports.update = async (customerData, id) => {
   const updatedCustomer = await customer.update(customerData, {
     where: {
-      senderId: senderId
+      id
     }
   })
   return updatedCustomer;

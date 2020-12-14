@@ -1,16 +1,17 @@
 require('dotenv').config()
 
+const http = require('http');
 const express = require('express');
 const cors = require('cors');
-const http = require('http');
-const bodyParser = require('body-parser');
+const logger = require('morgan');
+const { info } = require('./utils/debug'); 
 const router = require('./routes/router');
 const port = process.env.PORT || 3000;
 const sequelize = require('./sequelizer');
-const stetService = require('./services/state');
+const socket = require('./socket');
 
 const app = express();
-
+const server = http.createServer(app);
 // App configuration
 app.use(function (req, res, next) {
   res.header(
@@ -22,7 +23,7 @@ app.use(function (req, res, next) {
 
 app.use(cors());
 app.set('port', port);
-
+app.use(logger('dev', { stream: { write: (msg) => info(msg) } }));
 app.use(express.urlencoded({extended: false}))
 
 app.use(express.json());
@@ -40,14 +41,14 @@ async function assertDatabaseConnection () {
   }
 }
 
-stetService.defaultData();
+// stetService.defaultData();
 
 // Routes
 router(app);
 
 // Start server
 // =============================================================================
-app.listen(app.get('port'), async function () {
+server.listen(app.get('port'), async function () {
   try {
     await assertDatabaseConnection()
     console.log('Magic happens on port ', app.get('port'));
@@ -55,5 +56,8 @@ app.listen(app.get('port'), async function () {
     console.log('HAY UN ERROR');
   }
 });
+
+// Connect Socket
+socket.connect(server);
 
 exports.app = app;
